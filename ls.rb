@@ -9,11 +9,11 @@ $options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: ls.rb [options]"
 
-  opts.on("-1", "(The numeric digit `one`.)  Force output to be one entry per line.") do |opt|
+  opts.on("-1", "(The numeric digit `one`.) Force output to be one entry per line.") do |opt|
     $options[:one_per_line] = opt
   end
 
-  opts.on("-A", "List all entries except for `.` and ...  Always set for the super-user.") do |opt|
+  opts.on("-A", "List all entries except for `.` and `..`. Always set for the super-user.") do |opt|
     $options[:list_all_but_dot_and_double_dot] = opt
   end
 
@@ -21,12 +21,16 @@ OptionParser.new do |opts|
     $options[:list_all] = opt
   end
 
-  opts.on("-G", "Enable colorized output.") do |colorized|
-    $options[:colorized] = colorized
+  opts.on("-C", "Force multi-column output; this is the default when output is to a terminal.") do |opt|
+    $options[:multi_column] = opt
+  end
+
+  opts.on("-G", "Enable colorized output.") do |opt|
+    $options[:colorized] = opt
   end
 end.parse!
 
-unless $stdout.isatty
+unless $options[:multi_column] || $stdout.isatty
   $options[:one_per_line] = true
 end
 
